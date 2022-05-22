@@ -26,30 +26,25 @@ namespace Avia
         private void button_download_Click(object sender, EventArgs e)
         {
              dataGridView1.Rows.Clear();
-            // Создаем соеденение
-            string connectionString = "provider=Microsoft.Jet.OLEDB.4.0;Data Source=data.mdb";//строка соеденения
-            OleDbConnection dbConnection = new OleDbConnection(connectionString);//создаем соеденение
+            string connectionString = "provider=Microsoft.Jet.OLEDB.4.0;Data Source=data.mdb";
+            OleDbConnection dbConnection = new OleDbConnection(connectionString);
             OleDbDataReader dbReader = null;
 
             try
             {
-                // Выполянем запрос к БД
-                dbConnection.Open();                                            // открываем соеденение
-                string query = "SELECT * FROM Клиенты";                      // строка запроса
-                OleDbCommand dbCommand = new OleDbCommand(query, dbConnection); // команда
-                dbReader = dbCommand.ExecuteReader();                           // считываем данные
+                dbConnection.Open();                                         
+                string query = "SELECT * FROM Клиенты";                      
+                OleDbCommand dbCommand = new OleDbCommand(query, dbConnection);
+                dbReader = dbCommand.ExecuteReader();                         
 
-                // Проверяем данные
                 if (dbReader.HasRows == false)
                 {
                     MessageBox.Show("Данные не найдены!", "Ошибка!");
                 }
                 else
                 {
-                    // Чтение данных
                     while (dbReader.Read())
                     {
-                        // Выводим данные
                         dataGridView1.Rows.Add(dbReader["Кодклиента"], dbReader["Фамилия"], dbReader["Имя"], dbReader["Отчество"], dbReader["ДатаРождения"], dbReader["ДанныеПаспорта"], dbReader["Адрес"], dbReader["Телефон"]);
                     }
                     
@@ -57,12 +52,10 @@ namespace Avia
             }
             catch (Exception ex)
             {
-                //throw ex;
                 MessageBox.Show($"Сообщение: {ex.Message}", "Вызвано исключение!");
             }
             finally
             {
-                // Закрываем соеденение с БД
                 dbReader.Close();
                 dbConnection.Close();
             }
@@ -82,18 +75,16 @@ namespace Avia
                 return;
             }
             // Создаем соеденение
-            string connectionString = "provider=Microsoft.Jet.OLEDB.4.0;Data Source=data.mdb";  // строка соеденения
-            OleDbConnection dbConnection = new OleDbConnection(connectionString);                   // создаем соеденение
+            string connectionString = "provider=Microsoft.Jet.OLEDB.4.0;Data Source=data.mdb";
+            OleDbConnection dbConnection = new OleDbConnection(connectionString); 
 
             try
             {
-                // Выполянем запрос к БД
-                dbConnection.Open();//открываем соеденение
+                dbConnection.Open();
                 string query = "INSERT INTO Клиенты(Фамилия , Имя , Отчество , ДатаРождения , ДанныеПаспорта , Адрес , Телефон) " +
                                    "VALUES ('" + classes.firstName + "', '" + classes.name + "', '" + classes.path + "', " + ("'" + classes.birt.Day + "." + classes.birt.Month + "." + classes.birt.Year + "'") + ", '" + classes.pass + "', '" + classes.address + "', '" + classes.telephone + "')";
-                OleDbCommand dbCommand = new OleDbCommand(query, dbConnection);//команда
+                OleDbCommand dbCommand = new OleDbCommand(query, dbConnection);
                 
-                // Выполняем запрос
                 if (dbCommand.ExecuteNonQuery() != 1)
                     MessageBox.Show("Ошибка выполнения запроса!", "Ошибка!");
                 else
@@ -101,12 +92,10 @@ namespace Avia
             }
             catch (Exception ex)
             {
-                //throw ex;
                 MessageBox.Show($"Сообщение: {ex.Message}", "Вызвано исключение!");
             }
             finally
             {
-                // Закрываем соеденение с БД
                 dbConnection.Close();
 
             }
@@ -114,14 +103,13 @@ namespace Avia
 
         private void button_update_Click(object sender, EventArgs e)
         {
-            // Проверим количество выбранных строк
             if (dataGridView1.SelectedRows.Count != 1)
             {
                 MessageBox.Show("Выберите одну строку!", "Внимание!");
                 return;
             }
 
-            // Запомним выбранную строку
+            // Запомним выбранную строк
             int index = dataGridView1.SelectedRows[0].Index;
 
             string indexCell = dataGridView1.Rows[index].Cells[0].Value.ToString();
@@ -145,18 +133,15 @@ namespace Avia
                 return;
             }
 
-            // Создаем соеденение
-            string connectionString = "provider=Microsoft.Jet.OLEDB.4.0;Data Source=data.mdb";//строка соеденения
-            OleDbConnection dbConnection = new OleDbConnection(connectionString);//создаем соеденение
+            string connectionString = "provider=Microsoft.Jet.OLEDB.4.0;Data Source=data.mdb";
+            OleDbConnection dbConnection = new OleDbConnection(connectionString);
 
             try
             {
-                // Выполянем запрос к БД
-                dbConnection.Open();//открываем соеденение
+                dbConnection.Open();
                 string query = "UPDATE Клиенты SET Фамилия = '" + classes.firstName + "', Имя = '" + classes.name + "', Отчество= '" + classes.path + "', ДатаРождения=" + ("'" + classes.birt.Day + "." + classes.birt.Month + "." + classes.birt.Year + "'") + ", ДанныеПаспорта='" + classes.pass + "', Адрес='" + classes.address + "', Телефон='" + classes.telephone + "' WHERE Кодклиента = " + indexCell;//строка запроса
-                OleDbCommand dbCommand = new OleDbCommand(query, dbConnection);//команда
+                OleDbCommand dbCommand = new OleDbCommand(query, dbConnection);
 
-                //Выполняем запрос
                 if (dbCommand.ExecuteNonQuery() != 1)
                     MessageBox.Show("Ошибка выполнения запроса!", "Ошибка!");
                 else
@@ -166,60 +151,49 @@ namespace Avia
             }
             catch (Exception ex)
             {
-                //throw ex;
                 MessageBox.Show($"Сообщение: {ex.Message}", "Вызвано исключение!");
             }
             finally
             {
-                // Закрываем соеденение с БД
                 dbConnection.Close();
             }
         }
 
         private void button_delete_Click(object sender, EventArgs e)
         {
-            //Проверим количество выбранных строк
             if (dataGridView1.SelectedRows.Count != 1)
             {
                 MessageBox.Show("Выберите одну строку!", "Внимание!");
                 return;
             }
 
-            //Запомним выбранную строку
             int index = dataGridView1.SelectedRows[0].Index;
 
-            // Считаем данные
             string id = dataGridView1.Rows[index].Cells[0].Value.ToString();
 
-            // Создаем соеденение
-            string connectionString = "provider=Microsoft.Jet.OLEDB.4.0;Data Source=data.mdb";  // строка соеденения
-            OleDbConnection dbConnection = new OleDbConnection(connectionString);                   // создаем соеденение
+            string connectionString = "provider=Microsoft.Jet.OLEDB.4.0;Data Source=data.mdb"; 
+            OleDbConnection dbConnection = new OleDbConnection(connectionString);                   
 
             try
             {
-                // Выполянем запрос к БД
-                dbConnection.Open();                                            // открываем соеденение
-                string query = "DELETE FROM Клиенты WHERE Кодклиента = " + id;       // строка запроса
-                OleDbCommand dbCommand = new OleDbCommand(query, dbConnection); // команда
+                dbConnection.Open();                                           
+                string query = "DELETE FROM Клиенты WHERE Кодклиента = " + id; 
+                OleDbCommand dbCommand = new OleDbCommand(query, dbConnection); 
 
-                // Выполняем запрос
                 if (dbCommand.ExecuteNonQuery() != 1)
                     MessageBox.Show("Ошибка выполнения запроса!", "Ошибка!");
                 else
                 {
                     MessageBox.Show("Данные удалены!", "Внимание!");
-                    // Удаляем данные из таблицы в форме
                     dataGridView1.Rows.RemoveAt(index);
                 }
             }
             catch (Exception ex)
             {
-                //throw ex;
                 MessageBox.Show($"Сообщение: {ex.Message}", "Вызвано исключение!");
             }
             finally
             {
-                // Закрываем соеденение с БД
                 dbConnection.Close();
             }
         }
